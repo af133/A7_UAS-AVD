@@ -11,3 +11,5 @@
 # Cara Penggunaan Kode Distribusi Skor PHQ-9
 Step:
 1. Unduh file kode
+2. Pip install pandas, sklearn, matplotlib, dan seaborn
+3. Jalankan kode
