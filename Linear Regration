@@ -18,7 +18,7 @@ imputer = SimpleImputer(strategy='mean')
 data[numerical_columns] = imputer.fit_transform(data[numerical_columns])
 
 # Step 2: Select Dependent and Independent Variables
-X = data[[ 'fulltime']]
+X = data[[ 'fulltime']] # You can switch between fulltime, sex, or acha_acha_depression for x
 y = data['phq9_COMP']
 
 # Step 3: One-Hot Encoding for categorical variables (if any)
