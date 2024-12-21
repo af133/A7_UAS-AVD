@@ -1,0 +1,41 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.impute import SimpleImputer
+
+# Load dataset
+file_path = 'data.csv'
+data = pd.read_csv(file_path)
+
+# Step 1: Data Cleaning
+data = data.drop_duplicates()  # Drop duplicates
+data = data.dropna(subset=['phq9_COMP'])  # Drop rows with missing target value (phq9_COMP)
+
+# Handle missing values in other columns (impute numerical columns with mean, categorical with most frequent)
+numerical_columns = data.select_dtypes(include=['float64', 'int64']).columns
+imputer = SimpleImputer(strategy='mean')
+data[numerical_columns] = imputer.fit_transform(data[numerical_columns])
+
+# Step 2: Select Dependent and Independent Variables
+X = data[[ 'fulltime']]
+y = data['phq9_COMP']
+
+# Step 3: One-Hot Encoding for categorical variables (if any)
+X = pd.get_dummies(X, drop_first=True)
+
+# Step 4: Split data into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 5: Train Linear Regression Model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Step 6: Make Predictions
+y_pred = model.predict(X_test)
+
+# Step 7: Evaluate Model
+print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
+print("R-squared:", r2_score(y_test, y_pred))
+print("Intercept:", model.intercept_)
+print("Coefficients:", model.coef_)
